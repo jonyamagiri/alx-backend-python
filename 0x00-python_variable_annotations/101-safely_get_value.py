@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 101-safely_get_value.py """
+""" module 101-safely_get_value.py """
 from typing import Any, Mapping, TypeVar, Union
 
 
