@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 7-to_kv.py """
+""" module 7-to_kv.py """
 from typing import Union, Tuple
 
 
