@@ -2,9 +2,9 @@
 """ module test_client.py """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from parameterized import parameterized
-from typing import Any
+from typing import Any, Dict, List
 from client import GithubOrgClient
 
 
@@ -26,3 +26,19 @@ class TestGithubOrgClient(unittest.TestCase):
         test_return: Any = test_client.org
         self.assertEqual(test_return, mock_get.return_value)
         mock_get.assert_called_once()
+
+    def test_public_repos_url(self) -> None:
+        """Test the GithubOrgClient._public_repos_url method."""
+        test_json: Dict[str, str] = {"repos_url": "holberton"}
+        with patch.object(
+            GithubOrgClient,
+            "org",
+            new_callable=PropertyMock,
+            return_value=test_json
+        ) as mock_get:
+            test_client: GithubOrgClient = GithubOrgClient(
+                test_json.get("repos_url"))
+            test_return: str = test_client._public_repos_url
+            mock_get.assert_called_once()
+            self.assertEqual(test_return,
+                             mock_get.return_value.get("repos_url"))
