@@ -3,7 +3,7 @@
 
 import unittest
 from parameterized import parameterized
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Union
 from utils import access_nested_map
 
 
@@ -30,3 +30,26 @@ class TestAccessNestedMap(unittest.TestCase):
             None.
         """
         self.assertEqual(access_nested_map(nested_map, path), expected_output)
+
+    @parameterized.expand([
+        ({}, ("a",), KeyError),
+        ({"a": 1}, ("a", "b"), KeyError),
+    ])
+    def test_access_nested_map_exception(
+        self,
+        nested_map: Dict[str, Any],
+        path: Tuple[str, ...],
+        exception_msg: Exception
+    ) -> None:
+        """
+        Test that a KeyError is raised when accessing a non-existent key
+         in the nested map.
+        Args:
+            nested_map: The nested map to access.
+            path: The path to the value in the nested map.
+            exception_msg: The expected exception message.
+        Returns:
+            None.
+        """
+        with self.assertRaises(exception_msg):
+            access_nested_map(nested_map, path)
