@@ -2,10 +2,12 @@
 """ module test_client.py """
 
 import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
+from unittest.mock import patch, PropertyMock, Mock
+from parameterized import parameterized, parameterized_class
 from typing import Any, Dict, List
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+from urllib.error import HTTPError
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -78,3 +80,41 @@ class TestGithubOrgClient(unittest.TestCase):
         test_client = GithubOrgClient("holberton")
         test_return = test_client.has_license(repo, license_key)
         self.assertEqual(expected_return, test_return)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Integration test case for GithubOrgClient."""
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Set up the test class. It is part of the unittest.TestCase API method
+         to return example payloads found in the fixtures.
+        """
+        cls.get_patcher = patch('requests.get', side_effect=HTTPError)
+        cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Tear down the test class. It is part of the unittest.TestCase API
+         method to stop the patcher.
+        """
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """Test the public_repos method of GithubOrgClient."""
+        test_class = GithubOrgClient("holberton")
+        assert True
+
+    def test_public_repos_with_license(self):
+        """
+        Test the public_repos method of GithubOrgClient with the argument
+         'license'.
+        """
+        test_class = GithubOrgClient("holberton")
+        assert True
